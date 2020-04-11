@@ -29,7 +29,8 @@ async function Screenshot(url, width, height) {
       "--disable-gpu",
       "--start-fullscreen",
       "--start-maximized"
-    ]
+    ],
+    defaultViewport: null
   });
 
   const page = await browser.newPage();
@@ -43,10 +44,12 @@ async function Screenshot(url, width, height) {
     timeout: 0,
     waitUntil: "networkidle0"
   });
+
   const screenData = await page.screenshot({
     encoding: "binary",
     type: "jpeg",
-    quality: 100
+    quality: 100,
+    fullPage: true
   });
 
   await page.close();
