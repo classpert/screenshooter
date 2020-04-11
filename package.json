@@ -1,0 +1,24 @@
+{
+  "name": "screenshooter",
+  "version": "0.0.1",
+  "description": "An URLBOX.io clone",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/classpert/screenshooter.git"
+  },
+  "author": "Thiago Brandão <thiago@classpert.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/classpert/screenshooter/issues"
+  },
+  "homepage": "https://github.com/classpert/screenshooter#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^2.1.1"
+  }
+}
