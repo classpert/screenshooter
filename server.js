@@ -6,21 +6,28 @@ const app = express();
 
 // mimic urlbox io api, api_key and format are ignored
 app.get("/v1/:api_key/:format", async (req, res) => {
-  const { url, width, height } = req.query;
+  const { url, width, height, quality } = req.query;
+
   if (!url || url.length === 0) {
     return res.json({ error: "url query parameter is required" });
   }
 
-  const imageData = await Screenshot(url, width, height);
+  const imageData = await Screenshot(
+    url,
+    width,
+    height,
+    quality,
+    req.params.format
+  );
 
-  res.set("Content-Type", "image/jpeg");
+  res.set("Content-Type", `image/${req.params.format}`);
   res.set("Content-Length", imageData.length);
   res.send(imageData);
 });
 
 app.listen(process.env.PORT || 3000);
 
-async function Screenshot(url, width, height) {
+async function Screenshot(url, width, height, quality, format) {
   const browser = await puppeteer.launch({
     headless: true,
     executablePath: "/usr/bin/chromium-browser",
@@ -45,12 +52,17 @@ async function Screenshot(url, width, height) {
     waitUntil: "networkidle0"
   });
 
-  const screenData = await page.screenshot({
+  let screenshotOptions = {
     encoding: "binary",
-    type: "jpeg",
-    quality: 100,
+    type: format,
     fullPage: true
-  });
+  };
+
+  if (format === "jpeg") {
+    screenshotOptions.quality = parseInt(quality) || 100;
+  }
+
+  const screenData = await page.screenshot(screenshotOptions);
 
   await page.close();
   await browser.close();
