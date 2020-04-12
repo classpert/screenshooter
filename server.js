@@ -4,8 +4,8 @@ const puppeteer = require("puppeteer");
 
 const app = express();
 
-// /?url=https://google.com
-app.get("/", async (req, res) => {
+// mimic urlbox io api, api_key and format are ignored
+app.get("/v1/:api_key/:format", async (req, res) => {
   const { url, width, height } = req.query;
   if (!url || url.length === 0) {
     return res.json({ error: "url query parameter is required" });
