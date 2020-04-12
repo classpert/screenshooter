@@ -28,15 +28,21 @@ app.get("/v1/:api_key/:format", async (req, res) => {
 app.listen(process.env.PORT || 3000);
 
 async function Screenshot(url, width, height, quality, format) {
+  let launchArgs = [
+    "--no-sandbox",
+    "--disable-gpu",
+    "--start-fullscreen",
+    "--start-maximized"
+  ];
+
+  if (process.env.PROXY_URL) {
+    launchArgs = [...launchArgs, `--proxy-server=${process.env.PROXY_URL}`];
+  }
+
   const browser = await puppeteer.launch({
     headless: true,
     executablePath: "/usr/bin/chromium-browser",
-    args: [
-      "--no-sandbox",
-      "--disable-gpu",
-      "--start-fullscreen",
-      "--start-maximized"
-    ],
+    args: launchArgs,
     defaultViewport: null
   });
 
